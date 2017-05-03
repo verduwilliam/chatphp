@@ -32,7 +32,15 @@ if (isset($_POST["submit"])){
       $req->bindValue(":password", sha1($_POST["password"]));
 
       if($req->execute()){
-        echo "compte enrengistré";
+        $login=$PDO->prepare("SELECT * FROM users WHERE pseudo=:pseudo AND password=:password");
+        $login->bindValue(":pseudo", $_POST["pseudo"]);
+        $login->bindValue(":password", sha1($_POST["password"]));
+        $login->execute();
+        $compte=$login->fetch();
+        session_start();
+        $_SESSION['id'] = $compte->id;
+        $_SESSION['pseudo'] = $compte->pseudo;
+        echo "Compte enrengistré<br>Bienvenue ".$_SESSION['pseudo']." !";
       }
       else{
         echo "erreur";
@@ -64,7 +72,7 @@ if (isset($_POST["submit"])){
     <input type="reset">
   </form>
   <a href="chat.php">Chat</a>
-  <a href="loginchat.php">Log in</a>
+  <a href="loginchat.php">Log In</a>
   <a href="logout.php">Log Out</a>
 </body>
 </html>
