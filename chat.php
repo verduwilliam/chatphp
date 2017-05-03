@@ -30,15 +30,15 @@ if (isset($_POST["submit"]) && isset($_SESSION['id']) && isset($_SESSION['pseudo
   }
 }
 
-echo '<div id="chat">';
-$chat=$PDO->prepare("SELECT * FROM messages INNER JOIN users ON messages.user_id=users.id");
-$chat->execute();
-$afficher=$chat->fetchAll();
-foreach($afficher as $value){
-  echo "<div class='msgchat'><p>De: ".$value->pseudo."</p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
-}
-
-echo "</div>"
+// echo '<div id="chat">';
+// $chat=$PDO->prepare("SELECT * FROM messages INNER JOIN users ON messages.user_id=users.id");
+// $chat->execute();
+// $afficher=$chat->fetchAll();
+// foreach($afficher as $value){
+//   echo "<div class='msgchat'><p>De: ".$value->pseudo."</p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
+// }
+//
+// echo "</div>"
 
 ?>
 
@@ -49,20 +49,21 @@ echo "</div>"
   <title>Chat</title>
   <link rel="stylesheet" href="css/main.css">
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
-  <!-- <script type="text/javascript">
+  <script type="text/javascript">
   $(function(){
-  $.ajax({
-  url : "chat.php",
-  success : function(refresh){
-  $('#chat').html(refresh);
-}
-})
-})
-</script> -->
+    $.ajax({
+      url : "affmsg.php",
+      success : function(refresh){
+        $("#chat").html(refresh);
+      }
+    })
+  },60000)
+  </script>
 </head>
 <body>
+  <div id="chat">
+  </div>
   <form action="chat.php" method="POST">
-    <!-- <input type="text" name="user_id" id="user_id" placeholder="userid"> -->
     <input type="text" name="message" id="message" placeholder="message">
     <input type="submit" name="submit">
     <input type="reset">
