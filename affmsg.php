@@ -18,7 +18,7 @@ $chat=$PDO->prepare("SELECT * FROM messages INNER JOIN users ON messages.user_id
 $chat->execute();
 $afficher=$chat->fetchAll();
 foreach($afficher as $value){
-  echo "<div class='msgchat'><p>De: ".$value->pseudo."</p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
+  echo "<div class='msgchat'><p>de: <span style='font-weight:bold'>".$value->pseudo."</span></p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
 }
 // echo "</div>"
 ?>

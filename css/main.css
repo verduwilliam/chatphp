@@ -1,31 +1,101 @@
 body {
-  background-color: #AAA;
   background-image: url(../img/chat.svg);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 500px;
+  background-size: 100px;
   background-position: top right;
+  background-color: #fff9c4;
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: red;
+}
+
+h2 {
+  font-size: 1.5em;
 }
 
 input[type="text"],
 input[type="password"] {
-  background-color: #CCC;
-  border: 1px solid white;
-  margin: 5px 0px;
+  width: 100%;
 }
 
-a {
-  color: #333;
+input {
+  margin-bottom: 10px;
 }
+
+input[name="message"] {
+  width: 100%;
+}
+
+.links {
+  text-align: center;
+}
+
+.links a {
+   padding: 15px;
+ }
+
+ .buttons {
+   margin-left: auto;
+ }
+
+ #chat {
+   height: 375px;
+   overflow: scroll;
+   margin-top: 20px;
+   margin-bottom: 10px;
+ }
+
+ .msgchat {
+   padding: 5px;
+ }
+
+ .msgchat:nth-child(odd) {
+   background: #ffe082;
+ }
+
+ .msgchat p:nth-child(2) {
+   padding-left: 45px;
+ }
+
+ .msgchat p:nth-child(3) {
+   float: right;
+   margin-top: -15px;
+ }
+
+ .msgchat:nth-child(even) {
+   background-color: #ffecb3;
+ }
+
+ input[type="submit"],
+ input[type="reset"] {
+   background-color: #ff6f00;
+   border: 1px solid white;
+   border-radius: 15px;
+   color: white;
+ }
+
+ a {
+   color: black;
+   text-decoration: none;
+   transition: 0.5s;
+ }
 
 a:hover {
-  color: green;
+  color: #ef6c00;
+  font-size: 1.3em;
+  text-decoration: none;
 }
 
-.msgchat {
-  margin: 50px 0px;
+#submitchat {
+  width: 20%;
+  margin-left: 40%;
 }
 
-.msgchat p {
-  margin: 5px 0px;
+#logout {
+  background-color: red;
+  padding: 0px 15px;
 }

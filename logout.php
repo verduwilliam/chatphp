@@ -13,28 +13,9 @@ try {
   $e->getMessage();
 }
 
-if (isset($_POST["submit"])){
-  session_start();
-  $_SESSION = array();
-  session_destroy();
-  echo "Bye";
-}
+session_start();
+$_SESSION = array();
+session_destroy();
+header("location:loginchat.php");
 
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Log Out Chat</title>
-  <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-  <form action="logout.php" method="POST">
-    <input type="submit" name="submit" value="Logout">
-  </form>
-  <a href="inscriptionchat.php">Inscription</a>
-  <a href="loginchat.php">Log In</a>
-  <a href="chat.php">Chat</a>
-</body>
-</html>

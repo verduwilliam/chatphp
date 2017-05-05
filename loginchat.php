@@ -26,7 +26,7 @@ if (isset($_POST["submit"])){
     session_start();
     $_SESSION['id'] = $compte->id;
     $_SESSION['pseudo'] = $compte->pseudo;
-    echo "Bienvenue ".$_SESSION['pseudo']." !";
+    header("location:chat.php");
   }
 }
 ?>
@@ -36,17 +36,36 @@ if (isset($_POST["submit"])){
 <head>
   <meta charset="utf-8">
   <title>Log In Chat</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-  <form action="loginchat.php" method="POST">
-    <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
-    <input type="password" name="password" id="password" placeholder="Password"><br>
-    <input type="submit" name="submit">
-    <input type="reset">
-  </form>
-  <a href="logout.php">Log Out</a>
-  <a href="inscriptionchat.php">Inscription</a>
-  <a href="chat.php">Chat</a>
+  <div class="container-fluid">
+    <div class="col-lg-12">
+      <h1>Chat en PHP</h1>
+    </div>
+    <div class="col-lg-3 col-lg-offset-3">
+      <h2>Inscription</h2>
+      <form action="inscriptionchat.php" method="POST">
+        <input type="text" name="nom" id="nom" placeholder="Nom"><br>
+        <input type="text" name="prenom" id="prenom" placeholder="Prénom"><br>
+        <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
+        <input type="password" name="password" id="password" placeholder="Password"><br>
+        <input type="submit" name="submit">
+        <input type="reset">
+      </form>
+    </div>
+    <div class="col-lg-3">
+      <h2>Log In</h2>
+      <form action="loginchat.php" method="POST">
+        <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
+        <input type="password" name="password" id="password" placeholder="Password"><br>
+        <input type="submit" name="submit">
+        <input type="reset">
+      </form>
+    </div>
+  </div>
 </body>
 </html>

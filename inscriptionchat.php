@@ -40,7 +40,7 @@ if (isset($_POST["submit"])){
         session_start();
         $_SESSION['id'] = $compte->id;
         $_SESSION['pseudo'] = $compte->pseudo;
-        echo "Compte enrengistré<br>Bienvenue ".$_SESSION['pseudo']." !";
+        header("location:chat.php");
       }
       else{
         echo "erreur";
@@ -54,25 +54,3 @@ if (isset($_POST["submit"])){
 }
 
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Inscription Chat</title>
-  <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
-  <form action="inscriptionchat.php" method="POST">
-    <input type="text" name="nom" id="nom" placeholder="Nom"><br>
-    <input type="text" name="prenom" id="prenom" placeholder="Prénom"><br>
-    <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
-    <input type="password" name="password" id="password" placeholder="Password"><br>
-    <input type="submit" name="submit">
-    <input type="reset">
-  </form>
-  <a href="chat.php">Chat</a>
-  <a href="loginchat.php">Log In</a>
-  <a href="logout.php">Log Out</a>
-</body>
-</html>
