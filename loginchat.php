@@ -1,36 +1,3 @@
-<?php
-
-define("MYSQL_HOST", "localhost");
-define("MYSQL_USER", "root");
-define("MYSQL_PASSWD", "Cw83ulkdUcuiJVwQ");
-define("MYSQL_DB", "chat");
-
-try {
-  $PDO = new PDO("mysql:host=".MYSQL_HOST.";dbname=".MYSQL_DB,MYSQL_USER,MYSQL_PASSWD);
-  $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-  $PDO->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
-} catch (PDOException $e) {
-  $e->getMessage();
-}
-
-if (isset($_POST["submit"])){
-  $login=$PDO->prepare("SELECT * FROM users WHERE pseudo=:pseudo AND password=:password");
-  $login->bindValue(":pseudo", $_POST["pseudo"]);
-  $login->bindValue(":password", sha1($_POST["password"]));
-  $login->execute();
-  $compte=$login->fetch();
-
-  if($compte==""){
-    echo "Erreur mdp ou pseudo";
-  }else{
-    session_start();
-    $_SESSION['id'] = $compte->id;
-    $_SESSION['pseudo'] = $compte->pseudo;
-    header("location:chat.php");
-  }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +7,65 @@ if (isset($_POST["submit"])){
   <link rel="stylesheet" href="css/main.css">
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    $(function(){
+
+      //inscription
+      $("#formsignin").on("submit", function(e){
+        e.preventDefault()
+        data = {
+          nom : $("#nom").val(),
+          prenom : $("#prenom").val(),
+          pseudo : $("#pseudo").val(),
+          password : $("#password").val()
+        }
+        $.ajax({
+          method : "POST",
+          url : "inscriptionchat.php",
+          data : data,
+          success : function(resultat){
+            if(resultat=="0"){
+              window.location.href="chat.php";
+            }
+            else if(resultat=="1"){
+              alert("pseudo déjà pris");
+              $("#pseudo").focus().val("");
+            }
+            else if(resultat=="2"){
+              alert("remplir le formulaire")
+            }
+            else{
+              alert("Erreur")
+            }
+          }
+        })
+      })
+
+      //login
+      $("#formlogin").on("submit", function(e){
+        e.preventDefault()
+        datalog = {
+          pseudo : $("#pseudolog").val(),
+          password : $("#passwordlog").val(),
+        }
+        $.ajax({
+          method : "POST",
+          url : "login.php",
+          data : datalog,
+          success : function(resultat){
+            if(resultat==false){
+              alert("Erreur pseudo ou mdp");
+            }
+            else{
+              window.location.href="chat.php";
+            }
+          }
+        })
+      })
+    })
+  </script>
+
 </head>
 <body>
   <div class="container-fluid">
@@ -48,7 +74,7 @@ if (isset($_POST["submit"])){
     </div>
     <div class="col-lg-3 col-lg-offset-3">
       <h2>Inscription</h2>
-      <form action="inscriptionchat.php" method="POST">
+      <form action="" method="POST" id="formsignin">
         <input type="text" name="nom" id="nom" placeholder="Nom"><br>
         <input type="text" name="prenom" id="prenom" placeholder="Prénom"><br>
         <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
@@ -59,9 +85,9 @@ if (isset($_POST["submit"])){
     </div>
     <div class="col-lg-3">
       <h2>Log In</h2>
-      <form action="loginchat.php" method="POST">
-        <input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"><br>
-        <input type="password" name="password" id="password" placeholder="Password"><br>
+      <form action="" method="POST" id="formlogin">
+        <input type="text" name="pseudo" id="pseudolog" placeholder="Pseudo"><br>
+        <input type="password" name="password" id="passwordlog" placeholder="Password"><br>
         <input type="submit" name="submit">
         <input type="reset">
       </form>

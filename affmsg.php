@@ -12,13 +12,16 @@ try {
 } catch (PDOException $e) {
   $e->getMessage();
 }
-
-// echo '<div id="chat">';
+session_start();
 $chat=$PDO->prepare("SELECT * FROM messages INNER JOIN users ON messages.user_id=users.id");
 $chat->execute();
 $afficher=$chat->fetchAll();
 foreach($afficher as $value){
-  echo "<div class='msgchat'><p>de: <span style='font-weight:bold'>".$value->pseudo."</span></p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
+  if($value->pseudo==$_SESSION["pseudo"]){
+    echo "<div class='msgchat'><p>de: <span style='font-weight:bold'>".$value->pseudo."</span> (you)</p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
+  }
+  else{
+    echo "<div class='msgchat'><p>de: <span style='font-weight:bold'>".$value->pseudo."</span></p><p>".$value->message."</p><p>le: ".$value->créé."</p></div>";
+  }
 }
-// echo "</div>"
 ?>

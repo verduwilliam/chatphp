@@ -1,43 +1,3 @@
-<?php
-
-define("MYSQL_HOST", "localhost");
-define("MYSQL_USER", "root");
-define("MYSQL_PASSWD", "Cw83ulkdUcuiJVwQ");
-define("MYSQL_DB", "chat");
-
-try {
-  $PDO = new PDO("mysql:host=".MYSQL_HOST.";dbname=".MYSQL_DB,MYSQL_USER,MYSQL_PASSWD);
-  $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-  $PDO->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
-} catch (PDOException $e) {
-  $e->getMessage();
-}
-session_start();
-if($_SESSION["id"]==""){
-  header("location:loginchat.php");
-}
-else{
-  echo "Bienvenue ".$_SESSION['pseudo']." !";
-  if (isset($_POST["submit"]) && isset($_SESSION['id']) && isset($_SESSION['pseudo'])){
-
-    if($_POST["message"]!=""){
-
-      $req=$PDO->prepare("INSERT INTO messages (user_id, message) VALUES (:id, :message)");
-      $req->bindValue(":id", $_SESSION['id']);
-      $req->bindValue(":message", $_POST["message"]);
-
-      if($req->execute()){
-        echo "message envoyé";
-      }
-      else{
-        echo "erreur";
-      }
-    }
-  }
-}
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,8 +7,11 @@ else{
   <link rel="stylesheet" href="css/main.css">
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+
   <script type="text/javascript">
   $(function(){
+
+    //afficher messages toutes les 5s
     setInterval(function(){
       $.ajax({
         url : "affmsg.php",
@@ -58,17 +21,66 @@ else{
       })
     },5000)
 
-    //même fonction, mais au chargement de la page
-    $(function(){
+    //afficher messages au chargement de la page
+    $.ajax({
+      url : "affmsg.php",
+      success : function(getmsg){
+        $("#chat").html(getmsg);
+      }
+    })
+
+    //logout
+    $("#formlogout").on("submit", function(e){
+      e.preventDefault()
       $.ajax({
-        url : "affmsg.php",
-        success : function(refresh){
-          $("#chat").html(refresh);
+        url : "logout.php",
+        success : function(lo){
+          alert(lo);
+          window.location.href="loginchat.php"
         }
       })
     })
+
+    //dire bienvenue + verif login
+    $.ajax({
+      url : "bienvenue.php",
+      success : function(bv){
+        if(bv==false){
+          window.location.href="loginchat.php";
+        }
+        else{
+          alert(bv);
+        }
+      }
+    })
+
+    //envoyer messages
+    $("#formmsg").on("submit", function(e){
+      e.preventDefault()
+      data = {
+        message : $("#message").val()
+      }
+      $.ajax({
+        method : "POST",
+        url : "sndmsg.php",
+        data : data,
+        success : function(resultat){
+          if(resultat=="erreur"){
+            alert("Erreur envoie")
+          }else if(resultat=="1"){
+            alert("Entrez un message")
+          }
+          else{
+            alert(resultat)
+          }
+        }
+      })
+      $("#message").val("")
+    })
+
   })
   </script>
+
 </head>
 <body>
   <div class="container-fluid">
@@ -78,13 +90,13 @@ else{
     <div id="chat" class="col-lg-10 col-lg-offset-1">
     </div>
     <div class="col-lg-4 col-lg-offset-4">
-      <form action="chat.php" method="POST">
+      <form action="" method="POST" id="formmsg">
         <input type="text" name="message" id="message" placeholder="message"><br>
         <input type="submit" name="submit" id="submitchat">
       </form>
     </div>
     <div class="col-lg-4 col-lg-offset-4 links">
-      <form action="logout.php" method="POST">
+      <form action="" method="POST" id="formlogout">
         <input type="submit" id="logout" value="Log Out">
       </form>
     </div>

@@ -14,8 +14,11 @@ try {
 }
 
 session_start();
-$_SESSION = array();
-session_destroy();
-echo "Bye"
+if(isset($_SESSION["id"])){
+  echo "Bienvenue ".$_SESSION['pseudo']." !";
+}
+else{
+  echo false;
+}
 
 ?>
